@@ -53,6 +53,7 @@ export default function CompanyListings() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<CompanyValues>({
     resolver: zodResolver(companySchema),
@@ -73,6 +74,7 @@ export default function CompanyListings() {
         description: "Empresa adicionada com sucesso!",
       });
       setIsDialogOpen(false);
+      reset();
     } else {
       toast({ title: "Erro", description: "Falha ao adicionar empresa" });
     }
@@ -84,11 +86,17 @@ export default function CompanyListings() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id }),
     });
-
     if (response.ok) {
       setCompanies(companies.filter((company) => company.id !== id));
     } else {
-      console.error("Failed to delete company");
+      if (response.status === 401) {
+        toast({
+          title: "Erro",
+          description: "Empresa com veículos cadastrados",
+        });
+      } else {
+        toast({ title: "Erro", description: "Falha ao remover empresa" });
+      }
     }
   };
 
@@ -114,7 +122,10 @@ export default function CompanyListings() {
               <ArrowLeft className="mr-2 h-4 w-4" /> Voltar
             </Button>
           </Link>
-          <Dialog open={isDialogOpen}>
+          <Dialog
+            open={isDialogOpen}
+            onOpenChange={(open) => setIsDialogOpen(open)}
+          >
             <DialogTrigger asChild>
               <Button
                 onClick={() => setIsDialogOpen(true)}

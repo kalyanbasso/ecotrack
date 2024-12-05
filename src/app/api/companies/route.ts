@@ -31,6 +31,17 @@ export async function DELETE(req: Request) {
     );
   }
 
+  const vehicle = await prisma.vehicle.findFirst({
+    where: { companyId: id },
+  });
+
+  if (vehicle) {
+    return NextResponse.json(
+      { error: "Empresa com veículos cadastrados" },
+      { status: 401 }
+    );
+  }
+
   await prisma.company.delete({
     where: { id },
   });

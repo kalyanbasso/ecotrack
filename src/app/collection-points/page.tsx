@@ -66,10 +66,18 @@ export default function CollectionPoints() {
   }, []);
 
   const handleDelete = (id: number) => {
-    setCollectionPoints(collectionPoints.filter((point) => point.id !== id));
-    if (selectedPoint && selectedPoint.id === id) {
-      setSelectedPoint(null);
-    }
+    fetch("/api/collection-point", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    }).then(() => {
+      setCollectionPoints((points) =>
+        points.filter((point) => point.id !== id)
+      );
+      if (selectedPoint && selectedPoint.id === id) {
+        setSelectedPoint(null);
+      }
+    });
   };
 
   return (

@@ -65,17 +65,20 @@ export default function UserListings() {
   const [vehicles, setVehicle] = useState<Vehicle[]>([]);
   const [companies, setCompanies] = useState<Companies[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<VehicleValues>({
     resolver: zodResolver(vehicleSchema),
   });
 
   const onSubmit = async (data: VehicleValues) => {
+    setLoading(true);
     const response = await fetch("/api/vehicles", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -83,16 +86,17 @@ export default function UserListings() {
     });
 
     if (response.ok) {
-      const createdVehicle = await response.json();
-      setVehicle([...vehicles, createdVehicle]);
+      await response.json();
       toast({
         title: "Sucesso",
         description: "Veículo adicionado com sucesso!",
       });
       setIsDialogOpen(false);
+      reset();
     } else {
       toast({ title: "Erro", description: "Falha ao adicionar veículo" });
     }
+    setLoading(false);
   };
 
   const handleRemoveVehicle = async (id: number) => {
@@ -124,7 +128,7 @@ export default function UserListings() {
 
     fetchVehicle();
     fetchCompanies();
-  }, []);
+  }, [loading]);
 
   return (
     <div className="min-h-screen bg-green-50 p-8">
@@ -138,7 +142,10 @@ export default function UserListings() {
               <ArrowLeft className="mr-2 h-4 w-4" /> Voltar
             </Button>
           </Link>
-          <Dialog open={isDialogOpen}>
+          <Dialog
+            open={isDialogOpen}
+            onOpenChange={(open) => setIsDialogOpen(open)}
+          >
             <DialogTrigger asChild>
               <Button
                 onClick={() => setIsDialogOpen(true)}

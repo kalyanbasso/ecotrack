@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Users, Building2, Truck, LogOut, MapPin } from "lucide-react";
 import { useSession, signOut } from "next-auth/react";
+import Image from "next/image";
 
 export default function Dashboard() {
   const session = useSession();
@@ -44,7 +45,10 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-green-50 p-8">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-green-800">Dashboard</h1>
+        <div className="flex items-center">
+          <Image src={"/logo.png"} alt="Logo" width={100} height={100} />
+          <h1 className="text-3xl font-bold text-green-800">Dashboard</h1>
+        </div>
         <div className="flex items-center space-x-4">
           <p className="text-green-700">Olá, {session.data?.user?.name}</p>
           <Button

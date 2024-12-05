@@ -15,6 +15,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { signIn } from "next-auth/react";
+import Image from "next/image";
 
 const loginSchema = z.object({
   email: z
@@ -48,7 +49,8 @@ export function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-green-50 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-green-50 px-4 sm:px-6 lg:px-8">
+      <Image src={"/logo.png"} alt="Logo" width={100} height={100} />
       <Card className="w-full max-w-md bg-green-100">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center text-green-800">

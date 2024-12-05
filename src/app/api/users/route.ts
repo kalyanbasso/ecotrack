@@ -39,6 +39,7 @@ export async function DELETE(req: Request) {
 }
 
 export async function GET() {
+  console.log("EU TO DO LADO DO SERVIDOR");
   const users = await prisma.user.findMany({
     select: {
       id: true,

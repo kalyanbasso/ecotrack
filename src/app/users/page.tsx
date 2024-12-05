@@ -46,6 +46,7 @@ export default function UserListings() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<UserValues>({
     resolver: zodResolver(userSchema),
@@ -66,6 +67,7 @@ export default function UserListings() {
         description: "O usuário foi criado com sucesso",
       });
       setIsDialogOpen(false);
+      reset();
     } else {
       toast({
         title: "Erro ao criar usuário",
@@ -110,7 +112,10 @@ export default function UserListings() {
               <ArrowLeft className="mr-2 h-4 w-4" /> Voltar
             </Button>
           </Link>
-          <Dialog open={isDialogOpen}>
+          <Dialog
+            open={isDialogOpen}
+            onOpenChange={(open) => setIsDialogOpen(open)}
+          >
             <DialogTrigger asChild>
               <Button
                 onClick={() => setIsDialogOpen(true)}
